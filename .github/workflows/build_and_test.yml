@@ -1,0 +1,37 @@
+# Workflow name shown in the Actions tab.
+name: Node.js CI
+
+# Trigger on push to main branch.
+on:
+  push:
+    branches: [main]
+
+# Define jobs executed by this workflow.
+jobs:
+  build:
+    # Job label shown in the Actions UI.
+    name: Build and Test
+    # Use GitHub-hosted Ubuntu runner.
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download repository source code into the runner.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install Node.js runtime for subsequent npm commands.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Pin major version to reduce unexpected runtime changes.
+          node-version: "20"
+          # Enable npm dependency cache to speed up builds.
+          cache: "npm"
+
+      # Install dependencies defined in package.json.
+      - name: Install dependencies
+        run: npm install
+
+      # Run test script from package.json ("test").
+      - name: Run tests
+        run: npm test

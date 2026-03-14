@@ -1,0 +1,24 @@
+{
+  "name": "aws_cicd_study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoshi108-102/aws_cicd_study.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yoshi108-102/aws_cicd_study/issues"
+  },
+  "homepage": "https://github.com/yoshi108-102/aws_cicd_study#readme",
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}
