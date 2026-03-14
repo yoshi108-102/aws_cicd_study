@@ -20,6 +20,11 @@ on:
 # Define jobs executed by this workflow.
 jobs:
   build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello, world!"
+    
+  build:
     # Job label shown in the Actions UI.
     name: Build and Test
     # Use GitHub-hosted Ubuntu runner.
