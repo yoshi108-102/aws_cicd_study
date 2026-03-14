@@ -5,6 +5,17 @@ name: Node.js CI
 on:
   push:
     branches: [main]
+  # Allow manual run from the GitHub Actions UI.
+  workflow_dispatch:
+    inputs:
+      sum:
+        description: "Required value for manual run"
+        required: true
+        type: string
+      b:
+        description: "Second operand for sum(1, b)"
+        required: true
+        type: string
 
 # Define jobs executed by this workflow.
 jobs:
@@ -32,6 +43,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Show manually provided input value when run via workflow_dispatch.
+      - name: Print input sum
+        run: |
+          echo "sum=${{ github.event.inputs.sum }}"
+          echo "b=${{ github.event.inputs.b }}"
+
       # Run test script from package.json ("test").
       - name: Run tests
+        env:
+          # Empty on push events, populated on manual runs.
+          INPUT_SUM: ${{ github.event.inputs.sum || '' }}
+          INPUT_B: ${{ github.event.inputs.b || '' }}
         run: npm test
