@@ -1,63 +1,30 @@
-# Workflow name shown in the Actions tab.
-name: Node.js CI
-
-# Trigger on push to main branch.
-on:
-  push:
-    branches: [main]
-  # Allow manual run from the GitHub Actions UI.
-  workflow_dispatch:
-    inputs:
-      sum:
-        description: "Required value for manual run"
-        required: true
-        type: string
-      b:
-        description: "Second operand for sum(1, b)"
-        required: true
-        type: string
-
-# Define jobs executed by this workflow.
 jobs:
-  build:
+  lint:
+    name: Lint Code
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello, world!"
-    
-  build:
-    # Job label shown in the Actions UI.
-    name: Build and Test
-    # Use GitHub-hosted Ubuntu runner.
-    runs-on: ubuntu-latest
-
-    steps:
-      # Download repository source code into the runner.
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Install Node.js runtime for subsequent npm commands.
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          # Pin major version to reduce unexpected runtime changes.
-          node-version: "20"
-          # Enable npm dependency cache to speed up builds.
-          cache: "npm"
-
-      # Install dependencies defined in package.json.
-      - name: Install dependencies
-        run: npm install
-
-      # Show manually provided input value when run via workflow_dispatch.
-      - name: Print input sum
+      - uses: actions/checkout@v4
+      - name: Run linter
         run: |
-          echo "sum=${{ github.event.inputs.sum }}"
-          echo "b=${{ github.event.inputs.b }}"
+          npm install
+          npm run lint
 
-      # Run test script from package.json ("test").
-      - name: Run tests
-        env:
-          # Empty on push events, populated on manual runs.
-          INPUT_SUM: ${{ github.event.inputs.sum || '' }}
-          INPUT_B: ${{ github.event.inputs.b || '' }}
-        run: npm test
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute tests
+        run: |
+          npm install
+          npm test
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          npm install
+          npm run build
